@@ -10,7 +10,7 @@ describe Kuby::TrailingHash do
 
     # regular hashes don't allow adding keys during iteration
     expect do
-      h.each_with_index do |(k, _), idx|
+      h.each_with_index do |(_k, _), idx|
         h[:c] = 'd' if idx == 0
       end
     end.to raise_error(RuntimeError)
@@ -20,6 +20,6 @@ describe Kuby::TrailingHash do
       seen_keys << k
     end
 
-    expect(seen_keys).to eq([:a, :b, :c])
+    expect(seen_keys).to eq(%i[a b c])
   end
 end

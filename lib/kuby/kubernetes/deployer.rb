@@ -29,7 +29,7 @@ module Kuby
       end
 
       # adhere to the "CLI" interface
-      def with_pipes(out = STDOUT, err = STDERR)
+      def with_pipes(_out = STDOUT, err = STDERR)
         previous_logdev = logdev
         @logdev = err
         yield
@@ -108,7 +108,7 @@ module Kuby
               'deployment', namespace.metadata.name, deployment_name
             )
 
-            deployed_image = deployment.dig(*%w(spec template spec containers), 0, 'image')
+            deployed_image = deployment.dig('spec', 'template', 'spec', 'containers', 0, 'image')
           rescue ::KubernetesCLI::GetResourceError
           end
         end

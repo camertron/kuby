@@ -11,13 +11,13 @@ module Kuby
       sig { returns(Metadata) }
       attr_reader :metadata
 
-      sig {
+      sig do
         params(
           cli: CLI,
           metadata: Metadata
         )
-        .void
-      }
+          .void
+      end
       def initialize(cli, metadata)
         @cli = cli
         @metadata = metadata
@@ -37,15 +37,11 @@ module Kuby
         images = cli.images(metadata.image_url)
         latest = images.find { |image| image[:tag] == Tags::LATEST }
 
-        unless latest
-          raise MissingTagError.new(Tags::LATEST)
-        end
+        raise MissingTagError.new(Tags::LATEST) unless latest
 
         # find all tags that point to the same image as 'latest'
         images.each_with_object([]) do |image_data, tags|
-          if image_data[:id] == latest[:id]
-            tags << image_data[:tag]
-          end
+          tags << image_data[:tag] if image_data[:id] == latest[:id]
         end
       end
 
@@ -56,7 +52,7 @@ module Kuby
 
       sig { returns(T.nilable(TimestampTag)) }
       def latest_timestamp_tag
-        @latest_timestamp_tag ||= timestamp_tags.sort.last
+        @latest_timestamp_tag ||= timestamp_tags.max
       end
     end
   end

@@ -15,12 +15,12 @@ module Kuby
         end
 
         sig { params(distro: Symbol).returns(String) }
-        def package_name_for(distro)
+        def package_name_for(_distro)
           name
         end
 
         sig { params(ver: String).returns(T.self_type) }
-        def with_version(ver)
+        def with_version(_ver)
           self
         end
 

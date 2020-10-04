@@ -48,12 +48,12 @@ module Kuby
       sig { returns(String) }
       def default_base_image
         case metadata.distro
-          when :debian
-            "ruby:#{RUBY_VERSION}"
-          when :alpine
-            "ruby:#{RUBY_VERSION}-alpine"
-          else
-            raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
+        when :debian
+          "ruby:#{RUBY_VERSION}"
+        when :alpine
+          "ruby:#{RUBY_VERSION}-alpine"
+        else
+          raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
         end
       end
     end

@@ -14,7 +14,7 @@ module Kuby
         super.tap do |result|
           result[:type] = 'kubernetes.io/dockerconfigjson'
           result[:data] = {
-            :".dockerconfigjson" => Base64.strict_encode64({
+            ".dockerconfigjson": Base64.strict_encode64({
               auths: docker_configs.each_with_object({}) do |dc, ret|
                 ret.merge!(dc.serialize)
               end

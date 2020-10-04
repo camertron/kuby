@@ -62,9 +62,9 @@ module Kuby
         def delete_old_assets
           # find all asset directories; directories have timestamp names
           asset_dirs = (Dir.glob(File.join(dest_path, '*')) - [current_dir])
-            .select { |dir| File.directory?(dir) && try_parse_ts(File.basename(dir)) }
-            .sort_by { |dir| parse_ts(File.basename(dir)) }
-            .reverse
+                       .select { |dir| File.directory?(dir) && try_parse_ts(File.basename(dir)) }
+                       .sort_by { |dir| parse_ts(File.basename(dir)) }
+                       .reverse
 
           # only keep the n most recent directories
           dirs_to_delete = asset_dirs[KEEP..-1] || []
@@ -84,9 +84,7 @@ module Kuby
               # Only remove a symlink if it still points to a resource
               # in the directory we're currently deleting. Othewise, leave
               # it there - it was added by another deploy.
-              if File.readlink(link) == file_to_delete
-                File.unlink(link)
-              end
+              File.unlink(link) if File.readlink(link) == file_to_delete
             end
 
             FileUtils.rm_r(dir_to_delete)
@@ -96,7 +94,7 @@ module Kuby
         def try_parse_ts(ts)
           parse_ts(ts)
         rescue ArgumentError
-          return nil
+          nil
         end
 
         def parse_ts(ts)

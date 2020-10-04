@@ -39,9 +39,7 @@ module Kuby
     def load!(config_file = nil)
       config_file ||= ENV['KUBY_CONFIG'] || File.join('.', 'kuby.rb')
 
-      unless File.exist?(config_file)
-        raise MissingConfigError, "couldn't find Kuby config file at #{config_file}"
-      end
+      raise MissingConfigError, "couldn't find Kuby config file at #{config_file}" unless File.exist?(config_file)
 
       require config_file
     end
@@ -116,21 +114,21 @@ module Kuby
 
     def register_package(package_name, package_def = nil)
       packages[package_name] = case package_def
-        when NilClass
-          Kuby::Docker::Packages::SimpleManagedPackage.new(
-            package_name
-          )
-        when String
-          Kuby::Docker::Packages::SimpleManagedPackage.new(
-            package_def
-          )
-        when Hash
-          Kuby::Docker::Packages::ManagedPackage.new(
-            package_name, package_def
-          )
-        else
-          package_def.new(package_name)
-      end
+                               when NilClass
+                                 Kuby::Docker::Packages::SimpleManagedPackage.new(
+                                   package_name
+                                 )
+                               when String
+                                 Kuby::Docker::Packages::SimpleManagedPackage.new(
+                                   package_def
+                                 )
+                               when Hash
+                                 Kuby::Docker::Packages::ManagedPackage.new(
+                                   package_name, package_def
+                                 )
+                               else
+                                 package_def.new(package_name)
+                               end
     end
 
     def packages
@@ -143,7 +141,11 @@ module Kuby
 
     def env
       ENV.fetch('KUBY_ENV') do
-        (@env || Rails.env rescue nil || DEFAULT_ENV).to_s
+        begin
+          @env || Rails.env
+        rescue StandardError
+          nil || DEFAULT_ENV
+        end.to_s
       end
     end
   end
@@ -168,6 +170,5 @@ Kuby.register_package(:ca_certificates, 'ca-certificates')
 Kuby.register_package(:tzdata, 'tzdata')
 
 Kuby.register_package(:c_toolchain,
-  debian: 'build-essential',
-  alpine: 'build-base'
-)
+                      debian: 'build-essential',
+                      alpine: 'build-base')

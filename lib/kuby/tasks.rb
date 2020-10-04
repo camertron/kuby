@@ -24,22 +24,18 @@ module Kuby
     def build
       build_args = {}
 
-      unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
-        build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY']
-      end
+      build_args['RAILS_MASTER_KEY'] = ENV['RAILS_MASTER_KEY'] unless ENV.fetch('RAILS_MASTER_KEY', '').empty?
 
       docker.cli.build(
         dockerfile: docker.to_dockerfile,
-        image_url:  docker.metadata.image_url,
-        tags:       docker.metadata.tags,
+        image_url: docker.metadata.image_url,
+        tags: docker.metadata.tags,
         build_args: build_args
       )
     end
 
     def push
-      if environment.development?
-        fail 'Cannot push Docker images built for the development environment'
-      end
+      raise 'Cannot push Docker images built for the development environment' if environment.development?
 
       hostname = docker.metadata.image_hostname
 
@@ -147,6 +143,7 @@ module Kuby
         STDOUT.write('Set up development environment? (y/n): ')
         answer = STDIN.gets.strip.downcase
         return false unless answer =~ /ye?s?/
+
         return DevSetup.new(environment).run
       else
         depl = deployments.first
@@ -162,6 +159,7 @@ module Kuby
           # return true here to prevent letting an out-of-date deployment
           # stop us from running commands
           return true unless answer =~ /ye?s?/
+
           return DevSetup.new(environment).run
         end
       end
@@ -184,7 +182,7 @@ module Kuby
 
       if pods.empty?
         raise Kuby::Kubernetes::MissingResourceError,
-          "Couldn't find any running pods in namespace '#{namespace}' :("
+              "Couldn't find any running pods in namespace '#{namespace}' :("
 
         exit 1
       end

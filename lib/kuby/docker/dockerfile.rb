@@ -47,17 +47,23 @@ module Kuby
 
       class Workdir < Command
         sig { returns(String) }
-        def to_s; "WORKDIR #{super}"; end
+        def to_s
+          "WORKDIR #{super}"
+        end
       end
 
       class Env < Command
         sig { returns(String) }
-        def to_s; "ENV #{super}"; end
+        def to_s
+          "ENV #{super}"
+        end
       end
 
       class Run < Command
         sig { returns(String) }
-        def to_s; "RUN #{super}"; end
+        def to_s
+          "RUN #{super}"
+        end
       end
 
       class Copy < Command
@@ -88,17 +94,23 @@ module Kuby
 
       class Expose < Command
         sig { returns(String) }
-        def to_s; "EXPOSE #{super}"; end
+        def to_s
+          "EXPOSE #{super}"
+        end
       end
 
       class Cmd < Command
         sig { returns(String) }
-        def to_s; "CMD #{super}"; end
+        def to_s
+          "CMD #{super}"
+        end
       end
 
       class Arg < Command
         sig { returns(String) }
-        def to_s; "ARG #{super}"; end
+        def to_s
+          "ARG #{super}"
+        end
       end
 
       sig { returns(T::Array[Command]) }
@@ -172,7 +184,7 @@ module Kuby
       end
 
       sig { params(pos: Integer, block: T.proc.void).void }
-      def insert_at(pos, &block)
+      def insert_at(pos)
         @cursor = pos
         yield
       ensure

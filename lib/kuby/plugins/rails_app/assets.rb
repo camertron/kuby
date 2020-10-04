@@ -53,7 +53,7 @@ module Kuby
           deployment.spec.template.spec do
             init_container(:copy_assets) do
               name "#{spec.selector_app}-copy-assets"
-              command %w(bundle exec rake kuby:rails_app:assets:copy)
+              command %w[bundle exec rake kuby:rails_app:assets:copy]
               image docker_image
 
               volume_mount do

@@ -64,9 +64,9 @@ describe Kuby::Docker::Metadata do
     it 'specifies the current timestamp tag and the default tag' do
       Timecop.freeze do
         expect(subject).to eq([
-          Time.now.strftime('%Y%m%d%H%M%S'),
-          Kuby::Docker::Metadata::LATEST_TAG
-        ])
+                                Time.now.strftime('%Y%m%d%H%M%S'),
+                                Kuby::Docker::Metadata::LATEST_TAG
+                              ])
       end
     end
   end

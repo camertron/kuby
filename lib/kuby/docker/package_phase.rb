@@ -55,13 +55,13 @@ module Kuby
         environment.docker.distro_spec
       end
 
-      sig {
+      sig do
         params(
           package_name: Symbol,
           version: T.nilable(String)
         )
-        .returns(Distro::PackageImpl)
-      }
+          .returns(Distro::PackageImpl)
+      end
       def get_package(package_name, version)
         if package = Kuby.packages[package_name]
           package.with_version(version)

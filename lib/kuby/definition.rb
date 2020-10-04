@@ -3,7 +3,7 @@ module Kuby
   class Definition
     attr_reader :app_name
 
-    def initialize(app_name, &block)
+    def initialize(app_name)
       @app_name = app_name
     end
 
@@ -12,9 +12,7 @@ module Kuby
 
       environments[name] ||= Environment.new(name, self)
 
-      if block_given?
-        environments[name].instance_eval(&block)
-      end
+      environments[name].instance_eval(&block) if block_given?
 
       environments[name]
     end

@@ -21,7 +21,7 @@ module Kuby
     end
 
     # adhere to the "CLI" interface
-    def with_pipes(out = STDOUT, err = STDERR)
+    def with_pipes(_out = STDOUT, err = STDERR)
       previous_logdev = @logdev || STDERR
       reopen(err)
       yield

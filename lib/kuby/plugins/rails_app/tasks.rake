@@ -16,12 +16,10 @@ namespace :kuby do
       end
 
       task :create_unless_exists do
-        begin
-          Rake::Task['environment'].invoke
-          ActiveRecord::Base.connection
-        rescue ActiveRecord::NoDatabaseError => e
-          Rake::Task['db:create'].invoke
-        end
+        Rake::Task['environment'].invoke
+        ActiveRecord::Base.connection
+      rescue ActiveRecord::NoDatabaseError => e
+        Rake::Task['db:create'].invoke
       end
     end
 

@@ -34,12 +34,12 @@ module Kuby
         packages.delete_if { |pkg| pkg.name == name }
       end
 
-      sig {
+      sig do
         override.params(
           block: T.proc.params(package: Distro::PackageImpl).void
         )
-        .void
-      }
+                .void
+      end
       def each(&block)
         packages.each(&block)
       end

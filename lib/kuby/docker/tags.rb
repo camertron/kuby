@@ -16,14 +16,14 @@ module Kuby
       sig { returns Metadata }
       attr_reader :metadata
 
-      sig {
+      sig do
         params(
           cli: CLI,
           remote_client: ::Docker::Remote::Client,
           metadata: Metadata
         )
-        .void
-      }
+          .void
+      end
       def initialize(cli, remote_client, metadata)
         @cli = cli
         @remote_client = remote_client
@@ -44,9 +44,9 @@ module Kuby
         (local.latest_tags + remote.latest_tags).uniq
       end
 
-      sig {
+      sig do
         params(current_tag: String).returns(T.nilable(TimestampTag))
-      }
+      end
       def previous_timestamp_tag(current_tag)
         current_tag = TimestampTag.try_parse(current_tag)
         return nil unless current_tag
@@ -70,7 +70,7 @@ module Kuby
 
       sig { returns(T.nilable(TimestampTag)) }
       def latest_timestamp_tag
-        @latest_timestamp_tag ||= timestamp_tags.sort.last
+        @latest_timestamp_tag ||= timestamp_tags.max
       end
 
       sig { returns(T.self_type) }

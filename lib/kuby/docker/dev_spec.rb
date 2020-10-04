@@ -58,13 +58,13 @@ module Kuby
         setup_phase.rails_env = env
       end
 
-      sig {
+      sig do
         params(
           package_name: Symbol,
           version: T.nilable(String)
         )
-        .void
-      }
+          .void
+      end
       def package(package_name, version = nil)
         package_phase.add(package_name, version)
       end
@@ -80,27 +80,27 @@ module Kuby
         webserver_phase.port = port
       end
 
-      sig {
+      sig do
         params(
           name: Symbol,
           layer: T.nilable(Layer),
           block: T.nilable(T.proc.params(df: Dockerfile).void)
         )
-        .void
-      }
+          .void
+      end
       def use(name, layer = nil, &block)
         layer_stack.use(name, layer, &block)
       end
 
-      sig {
+      sig do
         params(
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
           options: T::Hash[Symbol, T.untyped],
           block: T.nilable(T.proc.params(df: Dockerfile).void)
         )
-        .void
-      }
+          .void
+      end
       def insert(name, layer = nil, options = {}, &block)
         layer_stack.insert(name, layer, options, &block)
       end
@@ -146,10 +146,10 @@ module Kuby
       sig { returns(Distro) }
       def distro_spec
         @distro_spec ||= if distro_klass = Kuby.distros[metadata.distro]
-          distro_klass.new(self)
-        else
-          raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
-        end
+                           distro_klass.new(self)
+                         else
+                           raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
+                         end
       end
 
       sig { returns(String) }
@@ -158,15 +158,13 @@ module Kuby
           tags.latest_timestamp_tag
         end
 
-        unless t
-          raise MissingTagError, 'could not find latest timestamped tag'
-        end
+        raise MissingTagError, 'could not find latest timestamped tag' unless t
 
         t.to_s
       end
 
       sig { params(current_tag: String).returns(String) }
-      def previous_tag(current_tag)
+      def previous_tag(_current_tag)
         raise MissingTagError, 'cannot roll back in the development environment'
       end
 

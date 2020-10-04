@@ -56,13 +56,13 @@ module Kuby
         bundler_phase.gemfile = path
       end
 
-      sig {
+      sig do
         params(
           package_name: Symbol,
           version: T.nilable(String)
         )
-        .void
-      }
+          .void
+      end
       def package(package_name, version = nil)
         package_phase.add(package_name, version)
       end
@@ -88,27 +88,27 @@ module Kuby
         metadata.image_url = url
       end
 
-      sig {
+      sig do
         params(
           name: Symbol,
           layer: T.nilable(Layer),
           block: T.nilable(T.proc.params(df: Dockerfile).void)
         )
-        .void
-      }
+          .void
+      end
       def use(name, layer = nil, &block)
         layer_stack.use(name, layer, &block)
       end
 
-      sig {
+      sig do
         params(
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
           options: T::Hash[Symbol, T.untyped],
           block: T.nilable(T.proc.params(df: Dockerfile).void)
         )
-        .void
-      }
+          .void
+      end
       def insert(name, layer = nil, options = {}, &block)
         layer_stack.insert(name, layer, options, &block)
       end
@@ -123,9 +123,9 @@ module Kuby
         layer_stack.includes?(name)
       end
 
-      sig {
+      sig do
         params(block: T.nilable(T.proc.void)).returns(Credentials)
-      }
+      end
       def credentials(&block)
         @credentials ||= Credentials.new
         @credentials.instance_eval(&block) if block
@@ -185,9 +185,7 @@ module Kuby
           tags.latest_timestamp_tag
         end
 
-        unless t
-          raise MissingTagError, 'could not find latest timestamped tag'
-        end
+        raise MissingTagError, 'could not find latest timestamped tag' unless t
 
         t.to_s
       end
@@ -196,9 +194,7 @@ module Kuby
       def previous_tag(current_tag)
         t = tags.previous_timestamp_tag(current_tag)
 
-        unless t
-          raise MissingTagError, 'could not find previous timestamped tag'
-        end
+        raise MissingTagError, 'could not find previous timestamped tag' unless t
 
         t.to_s
       end
@@ -212,17 +208,17 @@ module Kuby
       def remote_client
         @remote_client ||= ::Docker::Remote::Client.new(
           metadata.image_host, metadata.image_repo,
-          credentials.username, credentials.password,
+          credentials.username, credentials.password
         )
       end
 
       sig { returns(Distro) }
       def distro_spec
         @distro_spec ||= if distro_klass = Kuby.distros[metadata.distro]
-          distro_klass.new(self)
-        else
-          raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
-        end
+                           distro_klass.new(self)
+                         else
+                           raise MissingDistroError, "distro '#{metadata.distro}' hasn't been registered"
+                         end
       end
 
       sig { returns(Tags) }

@@ -8,7 +8,7 @@ module Kuby
       extend T::Sig
 
       DEFAULT_WITHOUT = T.let(
-        ['development', 'test', 'deploy'].freeze, T::Array[String]
+        %w[development test deploy].freeze, T::Array[String]
       )
 
       sig { returns(T.nilable(String)) }
@@ -55,9 +55,7 @@ module Kuby
         dockerfile.run('mkdir', './bundle')
         dockerfile.env('BUNDLE_PATH=./bundle')
 
-        unless wo.empty?
-          dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'")
-        end
+        dockerfile.env("BUNDLE_WITHOUT='#{wo.join(' ')}'") unless wo.empty?
 
         dockerfile.run(
           'bundle', 'install',

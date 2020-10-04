@@ -105,7 +105,7 @@ describe Kuby::Docker::Spec do
       it 'uses the given gemfile' do
         expect(subject).to include("COPY foo/bar/Gemfile .\n")
         expect(subject).to include("COPY foo/bar/Gemfile.lock .\n")
-        expect(subject).to match(/RUN bundle install .* --gemfile foo\/bar\/Gemfile/)
+        expect(subject).to match(%r{RUN bundle install .* --gemfile foo/bar/Gemfile})
       end
     end
   end
@@ -255,9 +255,9 @@ describe Kuby::Docker::Spec do
 
       before do
         docker_cli.build(
-        dockerfile: nil,
-        image_url: docker_image_url,
-        tags: [previous_tag]
+          dockerfile: nil,
+          image_url: docker_image_url,
+          tags: [previous_tag]
         )
       end
 

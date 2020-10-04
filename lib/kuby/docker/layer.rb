@@ -17,9 +17,9 @@ module Kuby
       end
 
       sig { params(dockerfile: Dockerfile).void }
-      def apply_to(dockerfile)
+      def apply_to(_dockerfile)
         raise NotImplementedError,
-          "#{__method__} must be defined in derived classes"
+              "#{__method__} must be defined in derived classes"
       end
 
       private

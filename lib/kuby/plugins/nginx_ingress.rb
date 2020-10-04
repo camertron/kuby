@@ -33,12 +33,12 @@ module Kuby
         end
 
         SETUP_RESOURCES.each do |uri|
-          uri = uri % { provider: @config.provider || DEFAULT_PROVIDER }
+          uri = format(uri, provider: @config.provider || DEFAULT_PROVIDER)
           kubernetes_cli.apply_uri(uri)
         end
 
         Kuby.logger.info('Nginx ingress resources deployed!')
-      rescue => e
+      rescue StandardError => e
         Kuby.logger.fatal(e.message)
         raise
       end
@@ -57,7 +57,7 @@ module Kuby
         kubernetes_cli.get_object('Service', 'ingress-nginx', 'ingress-nginx')
         true
       rescue KubernetesCLI::GetResourceError
-        return false
+        false
       end
 
       def after_initialize

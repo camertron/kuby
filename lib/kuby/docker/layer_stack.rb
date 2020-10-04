@@ -22,25 +22,26 @@ module Kuby
         @layers = T.let({}, T::Hash[Symbol, Layer])
       end
 
-      sig {
+      sig do
         override.params(
           block: T.nilable(T.proc.params(layer: Layer).void)
         )
-        .void
-      }
-      def each(&block)
+                .void
+      end
+      def each
         return to_enum(T.must(__method__)) unless block_given?
+
         @stack.each { |name| yield T.must(layers[name]) }
       end
 
-      sig {
+      sig do
         params(
           name: Symbol,
           layer: T.nilable(Layer),
           block: T.nilable(T.proc.params(df: Dockerfile).void)
         )
-        .void
-      }
+          .void
+      end
       def use(name, layer = nil, &block)
         stack << name
 
@@ -53,15 +54,15 @@ module Kuby
         end
       end
 
-      sig {
+      sig do
         params(
           name: Symbol,
           layer: T.nilable(T.any(Layer, T::Hash[Symbol, T.untyped])),
           options: T::Hash[Symbol, T.untyped],
           block: T.nilable(T.proc.params(df: Dockerfile).void)
         )
-        .void
-      }
+          .void
+      end
       def insert(name, layer = nil, options = {}, &block)
         # this is truly gross but it's the only way I can think of to be able
         # to call insert these two ways:
@@ -78,9 +79,7 @@ module Kuby
         existing_name = options[:before] || options[:after]
         idx = stack.index(existing_name)
 
-        unless idx
-          raise ArgumentError, "Could not find existing layer '#{existing_name}'"
-        end
+        raise ArgumentError, "Could not find existing layer '#{existing_name}'" unless idx
 
         idx += 1 if options[:after]
         stack.insert(idx, name)

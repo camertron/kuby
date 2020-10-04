@@ -2,7 +2,7 @@
 
 module Kuby
   class TrailingHash < Hash
-    def each(&block)
+    def each
       return to_enum(T.must(__method__)) unless block_given?
 
       seen_keys = []

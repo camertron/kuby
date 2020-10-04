@@ -143,11 +143,9 @@ module Kuby
 end
 
 Kuby.register_package(:mysql_client,
-  debian: 'default-mysql-client',
-  alpine: 'mariadb-client'
-)
+                      debian: 'default-mysql-client',
+                      alpine: 'mariadb-client')
 
 Kuby.register_package(:mysql_dev,
-  debian: 'default-libmysqlclient-dev',
-  alpine: 'mariadb-dev'
-)
+                      debian: 'default-libmysqlclient-dev',
+                      alpine: 'mariadb-dev')

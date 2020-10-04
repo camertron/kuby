@@ -9,9 +9,7 @@ module Docker
     end
 
     def config_file
-      if File.exist?(default_config_file)
-        default_config_file
-      end
+      default_config_file if File.exist?(default_config_file)
     end
 
     def default_config_file
@@ -28,8 +26,7 @@ module Docker
       nil
     end
 
-    def run(image_url:, tag: 'latest', env: {}, ports: [])
-    end
+    def run(image_url:, tag: 'latest', env: {}, ports: []); end
 
     def images(image_url)
       @images.fetch(image_url, []).map do |tag|
@@ -49,7 +46,6 @@ module Docker
       end
     end
 
-    def push(image_url, tag)
-    end
+    def push(image_url, tag); end
   end
 end

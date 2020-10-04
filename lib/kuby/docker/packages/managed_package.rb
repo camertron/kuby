@@ -12,13 +12,13 @@ module Kuby
         sig { returns(T::Hash[Symbol, String]) }
         attr_reader :names_per_distro
 
-        sig {
+        sig do
           params(
             name: Symbol,
             names_per_distro: T::Hash[Symbol, String]
           )
-          .void
-        }
+            .void
+        end
         def initialize(name, names_per_distro)
           @name = name
           @names_per_distro = names_per_distro
@@ -33,7 +33,7 @@ module Kuby
         end
 
         sig { params(ver: String).returns(T.self_type) }
-        def with_version(ver)
+        def with_version(_ver)
           self
         end
 

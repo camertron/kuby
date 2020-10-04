@@ -18,8 +18,8 @@ module Kuby
           registry_host.to_sym => {
             username: username,
             password: password,
-            email:    email,
-            auth:     Base64.strict_encode64("#{username}:#{password}")
+            email: email,
+            auth: Base64.strict_encode64("#{username}:#{password}")
           }
         }
       end

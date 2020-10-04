@@ -14,9 +14,7 @@ module Kuby
         }.freeze
 
         def self.get(rails_app)
-          if rails_app.manage_database?
-            new(rails_app)
-          end
+          new(rails_app) if rails_app.manage_database?
         end
 
         def self.get_adapter(adapter_name)
@@ -34,15 +32,15 @@ module Kuby
 
         def plugin
           @plugin ||= self.class
-            .get_adapter(adapter_name)
-            .new(rails_app.environment, db_configs)
+                          .get_adapter(adapter_name)
+                          .new(rails_app.environment, db_configs)
         end
 
         def adapter_name
           @adapter_name ||= db_config['adapter'].to_sym
         end
 
-        alias_method :plugin_name, :adapter_name
+        alias plugin_name adapter_name
 
         private
 

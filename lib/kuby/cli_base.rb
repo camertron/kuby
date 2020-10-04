@@ -1,7 +1,5 @@
 # typed: true
 require 'open3'
-require 'thread'
-
 module Kuby
   class CLIBase
     def last_status
@@ -19,8 +17,8 @@ module Kuby
     end
 
     def with_pipes(out = STDOUT, err = STDERR)
-      previous_stdout = self.stdout
-      previous_stderr = self.stderr
+      previous_stdout = stdout
+      previous_stderr = stderr
       self.stdout = out
       self.stderr = err
       yield
@@ -47,23 +45,19 @@ module Kuby
 
     private
 
-    def open3_w(env, cmd, opts = {}, &block)
+    def open3_w(env, cmd, opts = {})
       run_before_callbacks(cmd)
       cmd_s = cmd.join(' ')
 
       Open3.popen3(env, cmd_s, opts) do |p_stdin, p_stdout, p_stderr, wait_thread|
         Thread.new(stdout) do |t_stdout|
-          begin
-            p_stdout.each { |line| t_stdout.puts(line) }
-          rescue IOError
-          end
+          p_stdout.each { |line| t_stdout.puts(line) }
+        rescue IOError
         end
 
         Thread.new(stderr) do |t_stderr|
-          begin
-            p_stderr.each { |line| t_stderr.puts(line) }
-          rescue IOError
-          end
+          p_stderr.each { |line| t_stderr.puts(line) }
+        rescue IOError
         end
 
         yield(p_stdin).tap do
@@ -104,17 +98,13 @@ module Kuby
 
       Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
         Thread.new(stdout) do |t_stdout|
-          begin
-            p_stdout.each { |line| t_stdout.puts(line) }
-          rescue IOError
-          end
+          p_stdout.each { |line| t_stdout.puts(line) }
+        rescue IOError
         end
 
         Thread.new(stderr) do |t_stderr|
-          begin
-            p_stderr.each { |line| t_stderr.puts(line) }
-          rescue IOError
-          end
+          p_stderr.each { |line| t_stderr.puts(line) }
+        rescue IOError
         end
 
         p_stdin.close
@@ -148,17 +138,13 @@ module Kuby
 
       Open3.popen3(cmd_s) do |p_stdin, p_stdout, p_stderr, wait_thread|
         Thread.new do
-          begin
-            p_stdout.each { |line| result.puts(line) }
-          rescue IOError
-          end
+          p_stdout.each { |line| result.puts(line) }
+        rescue IOError
         end
 
         Thread.new(stderr) do |t_stderr|
-          begin
-            p_stderr.each { |line| t_stderr.puts(line) }
-          rescue IOError
-          end
+          p_stderr.each { |line| t_stderr.puts(line) }
+        rescue IOError
         end
 
         p_stdin.close

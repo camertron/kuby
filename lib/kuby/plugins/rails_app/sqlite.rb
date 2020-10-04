@@ -23,11 +23,9 @@ module Kuby
 end
 
 Kuby.register_package(:sqlite_dev,
-  debian: 'libsqlite3-dev',
-  alpine: 'sqlite-dev'
-)
+                      debian: 'libsqlite3-dev',
+                      alpine: 'sqlite-dev')
 
 Kuby.register_package(:sqlite_client,
-  debian: 'sqlite3',
-  alpine: 'sqlite'
-)
+                      debian: 'sqlite3',
+                      alpine: 'sqlite')

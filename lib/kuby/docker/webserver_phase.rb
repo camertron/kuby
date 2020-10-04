@@ -77,9 +77,7 @@ module Kuby
 
       sig { returns(T.nilable(Symbol)) }
       def default_webserver
-        if Gem.loaded_specs.include?('puma')
-          :puma
-        end
+        :puma if Gem.loaded_specs.include?('puma')
       end
     end
   end

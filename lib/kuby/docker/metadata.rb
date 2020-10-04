@@ -50,7 +50,7 @@ module Kuby
 
       sig { returns(String) }
       def image_repo
-        @image_repo ||= T.must(full_image_uri.path).sub(/\A[\/]+/, '')
+        @image_repo ||= T.must(full_image_uri.path).sub(%r{\A[/]+}, '')
       end
 
       sig { returns(T::Array[String]) }
@@ -64,21 +64,19 @@ module Kuby
       end
 
       sig { params(distro_name: Symbol).void }
-      def distro=(distro_name)
-        @distro = distro_name
-      end
+      attr_writer :distro
 
       private
 
       sig { returns(URI::Generic) }
       def full_image_uri
         @full_image_uri ||= if image_url.include?('://')
-          URI.parse(image_url)
-        elsif image_url =~ /\A[^.]+\.[^\/]+\//
-          URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{image_url}")
-        else
-          URI.parse("#{DEFAULT_REGISTRY_HOST}/#{image_url.sub(/\A[\/]+/, '')}")
-        end
+                              URI.parse(image_url)
+                            elsif image_url =~ %r{\A[^.]+\.[^/]+/}
+                              URI.parse("#{DEFAULT_REGISTRY_SCHEME}://#{image_url}")
+                            else
+                              URI.parse("#{DEFAULT_REGISTRY_HOST}/#{image_url.sub(%r{\A[/]+}, '')}")
+                            end
       end
 
       sig { returns(String) }

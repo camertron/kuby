@@ -23,11 +23,11 @@ module Kuby
             @provider.configure(&block)
           else
             msg = if provider_name
-              "no provider registered with name #{provider_name}, "\
-                'do you need to add a gem to your Gemfile?'
-            else
-              'no provider configured'
-            end
+                    "no provider registered with name #{provider_name}, "\
+                      'do you need to add a gem to your Gemfile?'
+                  else
+                    'no provider configured'
+                  end
 
             raise MissingProviderError, msg
           end
@@ -45,7 +45,7 @@ module Kuby
         @plugins[plugin_name].configure(&block) if block
       end
 
-      alias_method :add_plugin, :configure_plugin
+      alias add_plugin configure_plugin
 
       def plugin(plugin_name)
         @plugins[plugin_name]
@@ -103,9 +103,7 @@ module Kuby
 
         image_url = depl.dig('spec', 'template', 'spec', 'containers', 0, 'image')
 
-        unless image_url
-          raise MissingDeploymentError, "couldn't find an existing deployment"
-        end
+        raise MissingDeploymentError, "couldn't find an existing deployment" unless image_url
 
         deployed_tag = image_url.split(':').last
         previous_tag = docker.metadata.previous_tag(deployed_tag)

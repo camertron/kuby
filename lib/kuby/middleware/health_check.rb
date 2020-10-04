@@ -10,6 +10,7 @@ module Kuby
 
       def call(env)
         return [204, {}, ['']] if env.fetch('PATH_INFO') == '/healthz'
+
         app.call(env)
       end
     end

@@ -13,8 +13,8 @@ module Kuby
       def self.try_parse(str)
         time = begin
           Time.strptime(str, FORMAT)
-        rescue ArgumentError
-          return nil
+               rescue ArgumentError
+                 return nil
         end
 
         new(time)

@@ -22,7 +22,7 @@ module Kuby
         value_fields :manage_database, :database, :replicas
         value_fields :asset_url, :packs_url, :asset_path
 
-        alias_method :manage_database?, :manage_database
+        alias manage_database? manage_database
 
         def initialize(environment)
           @environment = environment
@@ -77,7 +77,7 @@ module Kuby
           database.plugin.host
         end
 
-        def before_deploy(manifest)
+        def before_deploy(_manifest)
           # Make sure plugin has been configured. If not, do nothing.
           if cert_manager = environment.kubernetes.plugin(:cert_manager)
             cert_manager.annotate_ingress(ingress)
@@ -189,12 +189,10 @@ module Kuby
             data do
               ENV.each_pair do |key, val|
                 include_key = key.start_with?('RAILS_') &&
-                  !ENV_SECRETS.include?(key) &&
-                  !ENV_EXCLUDE.include?(key)
+                              !ENV_SECRETS.include?(key) &&
+                              !ENV_EXCLUDE.include?(key)
 
-                if include_key
-                  add key.to_sym, val
-                end
+                add key.to_sym, val if include_key
               end
             end
           end
@@ -220,9 +218,7 @@ module Kuby
               else
                 master_key_path = File.join(spec.root, 'config', 'master.key')
 
-                if File.exist?(master_key_path)
-                  add MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip
-                end
+                add MASTER_KEY_VAR.to_sym, File.read(master_key_path).strip if File.exist?(master_key_path)
               end
             end
           end
@@ -378,12 +374,12 @@ module Kuby
                   else
                     init_container(:create_db) do
                       name "#{kube_spec.selector_app}-create-db"
-                      command %w(bundle exec rake kuby:rails_app:db:create_unless_exists)
+                      command %w[bundle exec rake kuby:rails_app:db:create_unless_exists]
                     end
 
                     init_container(:migrate_db) do
                       name "#{kube_spec.selector_app}-migrate-db"
-                      command %w(bundle exec rake db:migrate)
+                      command %w[bundle exec rake db:migrate]
                     end
 
                     image_pull_secret do

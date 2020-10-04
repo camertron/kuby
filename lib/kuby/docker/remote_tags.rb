@@ -11,13 +11,13 @@ module Kuby
       sig { returns(Metadata) }
       attr_reader :metadata
 
-      sig {
+      sig do
         params(
           remote_client: ::Docker::Remote::Client,
           metadata: Metadata
         )
-        .void
-      }
+          .void
+      end
       def initialize(remote_client, metadata)
         @remote_client = remote_client
         @metadata = metadata

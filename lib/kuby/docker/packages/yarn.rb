@@ -50,10 +50,10 @@ module Kuby
         sig { returns(String) }
         def url
           @url ||= if version
-            "https://github.com/yarnpkg/yarn/releases/download/v#{version}/yarn-v#{version}.tar.gz"
-          else
-            "https://yarnpkg.com/latest.tar.gz"
-          end
+                     "https://github.com/yarnpkg/yarn/releases/download/v#{version}/yarn-v#{version}.tar.gz"
+                   else
+                     "https://yarnpkg.com/latest.tar.gz"
+                   end
         end
       end
     end

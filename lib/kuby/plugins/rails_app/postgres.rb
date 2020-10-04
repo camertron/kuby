@@ -134,11 +134,9 @@ module Kuby
 end
 
 Kuby.register_package(:postgres_dev,
-  debian: 'postgresql-client',
-  alpine: 'postgresql-dev'
-)
+                      debian: 'postgresql-client',
+                      alpine: 'postgresql-dev')
 
 Kuby.register_package(:postgres_client,
-  debian: 'postgresql-client',
-  alpine: 'postgresql-client'
-)
+                      debian: 'postgresql-client',
+                      alpine: 'postgresql-client')

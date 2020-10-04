@@ -19,9 +19,7 @@ module Kuby
 
       sig { returns(T.nilable(String)) }
       def config_file
-        if File.exist?(default_config_file)
-          default_config_file
-        end
+        default_config_file if File.exist?(default_config_file)
       end
 
       sig { returns(String) }
@@ -53,15 +51,15 @@ module Kuby
         config.fetch('auths', {}).keys
       end
 
-      sig {
+      sig do
         params(
           dockerfile: Dockerfile,
           image_url: String,
           tags: T::Array[String],
           build_args: T::Hash[T.any(Symbol, String), String]
         )
-        .void
-      }
+          .void
+      end
       def build(dockerfile:, image_url:, tags:, build_args: {})
         cmd = [
           executable, 'build',
@@ -82,15 +80,15 @@ module Kuby
         end
       end
 
-      sig {
+      sig do
         params(
           image_url: String,
           tag: String,
           env: T::Hash[T.any(Symbol, String), String],
           ports: T::Array[T.any(String, Integer)]
         )
-        .void
-      }
+          .void
+      end
       def run(image_url:, tag: 'latest', env: {}, ports: [])
         cmd = [
           executable, 'run',
@@ -121,8 +119,8 @@ module Kuby
       sig { params(image_url: String, tag: String).void }
       def push(image_url, tag)
         systemm([
-          executable, 'push', "#{image_url}:#{tag}"
-        ])
+                  executable, 'push', "#{image_url}:#{tag}"
+                ])
 
         unless last_status.success?
           raise PushError, 'push failed: docker command exited with '\
@@ -133,8 +131,8 @@ module Kuby
       sig { params(image_url: String, tag: String).void }
       def pull(image_url, tag)
         systemm([
-          executable, 'pull', "#{image_url}:#{tag}"
-        ])
+                  executable, 'pull', "#{image_url}:#{tag}"
+                ])
 
         unless last_status.success?
           raise PullError, 'pull failed: docker command exited with '\

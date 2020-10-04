@@ -1,7 +1,7 @@
 # typed: true
 module Kuby
   class Spinner
-    PIECES = %w(- \\ | /).freeze
+    PIECES = %w[- \\ | /].freeze
     INTERVAL = 0.2  # seconds
 
     def self.spin(message)
@@ -16,19 +16,19 @@ module Kuby
       @thread = Thread.new do
         counter = 0
 
-        while true
+        loop do
           case status
-            when :running
-              piece = PIECES[counter % PIECES.size]
-              STDOUT.write "\r[#{piece}] #{message}"
-              sleep INTERVAL
-              counter += 1
-            when :success
-              STDOUT.write("\r[+] #{message}")
-              break
-            when :failure
-              STDOUT.write("\r[×] #{message}")
-              break
+          when :running
+            piece = PIECES[counter % PIECES.size]
+            STDOUT.write "\r[#{piece}] #{message}"
+            sleep INTERVAL
+            counter += 1
+          when :success
+            STDOUT.write("\r[+] #{message}")
+            break
+          when :failure
+            STDOUT.write("\r[×] #{message}")
+            break
           end
         end
 
@@ -112,7 +112,7 @@ module Kuby
       if remaining_pipes.empty?
         begin
           yield
-        rescue => e
+        rescue StandardError => e
           @ex = e
         end
 
@@ -174,6 +174,7 @@ module Kuby
 
     def print_error(ex)
       return unless ex
+
       puts("========= RUBY ERROR ========")
       puts(ex.message)
       puts(ex.backtrace.join("\n"))
@@ -208,7 +209,7 @@ module Kuby
         ),
 
         SetupTask.new(
-          'Installing bundler', -> {
+          'Installing bundler', lambda {
             tasks.remote_system("gem install bundler -v #{Bundler::VERSION}")
           }
         ),

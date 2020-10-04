@@ -35,7 +35,7 @@ module Kuby
   end
 
   class RailsCommands
-    PREFIX = %w(bundle exec).freeze
+    PREFIX = %w[bundle exec].freeze
     SERVER_ARG_ALIASES = [['--binding', '-b'], ['-p', '--port']].freeze
 
     class << self
@@ -47,10 +47,10 @@ module Kuby
           arglist = nil
 
           case subcommand
-            when 'server', 's'
-              arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
-              arglist['-b'] ||= '0.0.0.0'
-              arglist['-p'] ||= '3000'
+          when 'server', 's'
+            arglist = Args.new([*PREFIX, *args], SERVER_ARG_ALIASES)
+            arglist['-b'] ||= '0.0.0.0'
+            arglist['-p'] ||= '3000'
           end
         end
 
